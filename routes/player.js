@@ -3,6 +3,7 @@ const router = require('express').Router();
 // database
 const mongoose = require('mongoose');
 const Player = require('../models/Player');
+const Game = require('../models/Game');
 
 router.get('/', async (req, res) => {
     // retrieve all players
@@ -14,9 +15,23 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.get('/:id', (req,res) => {
+router.get('/:playerId', (req,res) => {
     // lookup the user with that id
-    res.json(req.params.id);
+    Player.findById(mongoose.Types.ObjectId(req.params.playerId), function (err, player) { 
+        if (!player) {
+            error = "Player not found";
+            res.status(404).json({ error });
+            // stop further execution in this callback
+            return;
+        }
+        if (err) {
+            console.log(err);
+            res.sendStatus(500);
+            return;
+        }
+        res.json(player);
+    });
+
 });
 
 router.post('/addPlayer/:name', async (req,res) => {

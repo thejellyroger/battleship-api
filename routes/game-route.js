@@ -3,6 +3,7 @@ const router = require('express').Router();
 // database
 const mongoose = require('mongoose');
 const Game = require('../models/Game');
+const Player = require('../models/Player');
 
 /*
 router.get('/', async (req, res) => {
@@ -42,6 +43,9 @@ router.get('/:gameId', (req,res) => {
 
 router.post('/addGame/', async (req,res) => {
     const game = new Game({
+        challenge: req.body.challenge,
+        grid_type: req.body.grid_type,
+        fleet_type: req.body.fleet_type,
         winner : {
             id : mongoose.Types.ObjectId(req.body.winner_id),
             username: req.body.winner_name,
@@ -65,6 +69,39 @@ router.post('/addGame/', async (req,res) => {
     try {
         const savedGame = await game.save();
         res.json(savedGame);
+        // add game to the players involved
+        const winnerId = mongoose.Types.ObjectId(req.body.winner_id);
+        const loserId = mongoose.Types.ObjectId(req.body.loser_id);
+        Player.findByIdAndUpdate(winnerId, {$push: { games: savedGame.id}}, { useFindAndModify: false })
+            .then(player => {
+                if (!player) {
+                    res.status(404).send({
+                        message: `Cannot update player with id=${winnerId}. Maybe Player was not found!`
+                    });
+                } 
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).send({
+                message: "Error updating Player with id=" + winnerId,
+            });
+        });
+
+        Player.findByIdAndUpdate(loserId, {$push: { games: savedGame.id}}, { useFindAndModify: false })
+            .then(player => {
+                if (!player) {
+                    res.status(404).send({
+                        message: `Cannot update player with id=${loserId}. Maybe Player was not found!`
+                    });
+                } 
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).send({
+                message: "Error updating Player with id=" + loserId,
+            });
+        });    
+
     } catch(err) {
         console.log(err);
         res.json({message: err});
