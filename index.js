@@ -7,6 +7,7 @@ const app = express();
 // routes
 const playerRoutes = require('./routes/player');
 const authRoutes = require('./routes/auth');
+const gamesRoutes = require('./routes/game-route');
 
 const PORT = process.env.PORT || 8080;
 
@@ -22,8 +23,9 @@ app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 
 // setup routes
-app.use('/player', playerRoutes);
+app.use('/players', playerRoutes);
 app.use('/auth', authRoutes);
+app.use('/games', gamesRoutes);
 
 // home route
 app.get('/', (req,res) => {
