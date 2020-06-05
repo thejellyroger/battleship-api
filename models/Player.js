@@ -5,9 +5,15 @@ const PlayerSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    games : [mongoose.Types.ObjectId],
-    tot_hits : Number,
-    tot_miss : Number,
+    games : {
+        game_id: mongoose.Types.ObjectId,
+        date: {type: Date, default: Date.now},
+        challenge: {type: String, default : "Single"},
+        won: Boolean,
+        opponent_username: String,
+    },
+    games_won : {type: Number, "default":0},
+    games_lost : {type: Number, "default":0},
 
 });
 

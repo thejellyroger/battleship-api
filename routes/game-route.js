@@ -72,7 +72,13 @@ router.post('/addGame/', async (req,res) => {
         // add game to the players involved
         const winnerId = mongoose.Types.ObjectId(req.body.winner_id);
         const loserId = mongoose.Types.ObjectId(req.body.loser_id);
-        Player.findByIdAndUpdate(winnerId, {$push: { games: savedGame.id}}, { useFindAndModify: false })
+        Player.findByIdAndUpdate(winnerId, {$push: { games: {
+                game_id: savedGame.id,
+                challenge: req.body.challenge,
+                won: true,
+                opponent_username: req.body.loser_name,
+            }
+        }}, { useFindAndModify: false })
             .then(player => {
                 if (!player) {
                     res.status(404).send({
@@ -87,7 +93,13 @@ router.post('/addGame/', async (req,res) => {
             });
         });
 
-        Player.findByIdAndUpdate(loserId, {$push: { games: savedGame.id}}, { useFindAndModify: false })
+        Player.findByIdAndUpdate(loserId, {$push: { games: {
+                game_id: savedGame.id,
+                challenge: req.body.challenge,
+                won: false,
+                opponent_username: req.body.winner_name,
+            }
+        }}, { useFindAndModify: false })
             .then(player => {
                 if (!player) {
                     res.status(404).send({

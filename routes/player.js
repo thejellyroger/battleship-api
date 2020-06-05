@@ -36,7 +36,7 @@ router.get('/:playerId', (req,res) => {
 
 router.post('/addPlayer/:name', async (req,res) => {
     const player = new Player({
-        username: req.params.name
+        username: req.params.name,
     });
     
     try {
