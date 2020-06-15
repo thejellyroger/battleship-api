@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/:playerId', (req,res) => {
-    // lookup the user with that id
+    // lookup the user with specific id
     Player.findById(mongoose.Types.ObjectId(req.params.playerId), function (err, player) { 
         if (!player) {
             error = "Player not found";
@@ -33,6 +33,44 @@ router.get('/:playerId', (req,res) => {
     });
 
 });
+router.get('/basicInfo/:playerId', (req,res) => {
+    // return the player with the 20 most recently played games
+    Player.findById(mongoose.Types.ObjectId(req.params.playerId),  { games: {$slice: 20} } , function (err, player) { 
+        if (!player) {
+            error = "Player not found";
+            res.status(404).json({ error });
+            // stop further execution in this callback
+            return;
+        }
+        if (err) {
+            console.log(err);
+            res.sendStatus(500);
+            return;
+        }
+        
+        res.json(player);
+    });
+});
+
+/*
+router.get('latestSmallGames/:playerId', (req,res) => {
+    // get the 20 most recently played games
+    Player.findById(mongoose.Types.ObjectId(req.params.playerId), function (err,player) {
+        if (!player) {
+            error = "Player not found";
+            res.status(404).json({ error });
+            // stop further execution in this callback
+            return;
+        }
+        if (err) {
+            console.log(err);
+            res.sendStatus(500);
+            return;
+        }
+        res.json(player.games.slice(0, 20));
+    });
+});
+*/
 
 router.post('/addPlayer/:name', async (req,res) => {
     const player = new Player({

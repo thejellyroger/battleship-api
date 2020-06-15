@@ -11,6 +11,14 @@ const GameSchema = mongoose.Schema({
         type: String,
         default: 'Single',
     },
+    first_game_in_challenge: {
+        type: Boolean,
+        default: "false",
+    },
+    related_games: { // in case of a challenge  (e.g. best of 3)
+        type: [mongoose.Types.ObjectId],
+        default: [],
+    },
     grid_type: {
         // 10x10, 20x20...
         type: Number,
@@ -19,7 +27,7 @@ const GameSchema = mongoose.Schema({
     fleet_type: {
         // Small, Normal, Large...
         type: String,
-        default: 'Normal',
+        default: "Normal",
     },
     winner : {
         // winner's info
@@ -28,7 +36,7 @@ const GameSchema = mongoose.Schema({
         score: {type: Number, required: true},
         hit_miss_ratio : {type: Number, required: true},
         shots_fired : {type: Number, required: true},
-        fleet_name : {type: String, required: true},
+        fleet_name : {type: String, "default":"The usual"},
     },
     loser : {
         // loser's info

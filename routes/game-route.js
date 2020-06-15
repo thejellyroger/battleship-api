@@ -44,6 +44,8 @@ router.get('/:gameId', (req,res) => {
 router.post('/addGame/', async (req,res) => {
     const game = new Game({
         challenge: req.body.challenge,
+        first_game_in_challenge: req.body.first_game_in_challenge,
+        related_games: req.body.related_games,
         grid_type: req.body.grid_type,
         fleet_type: req.body.fleet_type,
         winner : {
@@ -76,9 +78,10 @@ router.post('/addGame/', async (req,res) => {
                 game_id: savedGame.id,
                 challenge: req.body.challenge,
                 won: true,
+                surrendered: req.body.surrendered,
                 opponent_username: req.body.loser_name,
             }
-        }}, { useFindAndModify: false })
+        }, $inc : {games_won: 1}}, { useFindAndModify: false })
             .then(player => {
                 if (!player) {
                     res.status(404).send({
@@ -97,9 +100,10 @@ router.post('/addGame/', async (req,res) => {
                 game_id: savedGame.id,
                 challenge: req.body.challenge,
                 won: false,
+                surrendered: req.body.surrendered,
                 opponent_username: req.body.winner_name,
             }
-        }}, { useFindAndModify: false })
+        },$inc : {games_lost: 1}}, { useFindAndModify: false })
             .then(player => {
                 if (!player) {
                     res.status(404).send({
