@@ -29,7 +29,7 @@ app.use('/games', gamesRoutes);
 
 // home route
 app.get('/', (req,res) => {
-    res.json('hello');
+    res.json('API per app Battleship, sviluppata dal gruppo Fritti Misti durante il corso di Mobile Programming');
 })
 
 // database connection
