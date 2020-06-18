@@ -79,7 +79,7 @@ router.post('/addPlayer/:name', async (req,res) => {
     
     try {
         const savedPlayer = await player.save();
-        res.json(savedPlayer);
+        res.json(savedPlayer.id);
     } catch(err) {
         console.log(err);
         res.json({message: err});
