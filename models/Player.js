@@ -7,8 +7,8 @@ const PlayerSchema = mongoose.Schema({
     },
     games : {
         game_id: mongoose.Types.ObjectId,
-        date: {type: Date, "default": Date.now},
-        challenge: {type: String, "default" : "Single"},
+        date: {type: String},
+        challenge: {type: String},
         won: Boolean,
         surrendered: Boolean,
         opponent_username: String,

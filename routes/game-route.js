@@ -76,6 +76,7 @@ router.post('/addGame/', async (req,res) => {
         const loserId = mongoose.Types.ObjectId(req.body.loser_id);
         Player.findByIdAndUpdate(winnerId, {$push: { games: {
                 game_id: savedGame.id,
+                date: req.body.date,
                 challenge: req.body.challenge,
                 won: true,
                 surrendered: req.body.surrendered,
@@ -98,6 +99,7 @@ router.post('/addGame/', async (req,res) => {
 
         Player.findByIdAndUpdate(loserId, {$push: { games: {
                 game_id: savedGame.id,
+                date: req.body.date,
                 challenge: req.body.challenge,
                 won: false,
                 surrendered: req.body.surrendered,

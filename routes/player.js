@@ -52,26 +52,6 @@ router.get('/basicInfo/:playerId', (req,res) => {
     });
 });
 
-/*
-router.get('latestSmallGames/:playerId', (req,res) => {
-    // get the 20 most recently played games
-    Player.findById(mongoose.Types.ObjectId(req.params.playerId), function (err,player) {
-        if (!player) {
-            error = "Player not found";
-            res.status(404).json({ error });
-            // stop further execution in this callback
-            return;
-        }
-        if (err) {
-            console.log(err);
-            res.sendStatus(500);
-            return;
-        }
-        res.json(player.games.slice(0, 20));
-    });
-});
-*/
-
 router.post('/addPlayer/:name', async (req,res) => {
     const player = new Player({
         username: req.params.name,
