@@ -5,23 +5,11 @@ const mongoose = require('mongoose');
 const Game = require('../models/Game');
 const Player = require('../models/Player');
 
-/*
-router.get('/', async (req, res) => {
-    // retrieve all games
-    try {
-        const players = await Player.find();
-        res.json(players);
-    } catch(err) {
-        res.json({message: err});
-    }
-});
-*/
-
 router.get('/:gameId', (req,res) => {
     // look up a game with a specific id
     /*
-        example: the player has a reference to all the ids of the games they played
-                in the app, a recycler view is created with all these ids.
+        usage: the player has a reference to all the ids of the games they played
+                in the app, a recycler view is created with all these ids and some other info.
                 when the user clicks on a specific game, this api gets called, and uses the id as the parameter
     */
     Game.findById(mongoose.Types.ObjectId(req.params.gameId), function (err, game) { 
@@ -41,6 +29,7 @@ router.get('/:gameId', (req,res) => {
 
 });
 
+// add a new game in the database using the relevant info in the body of the request
 router.post('/addGame/', async (req,res) => {
     const game = new Game({
         challenge: req.body.challenge,
@@ -68,6 +57,7 @@ router.post('/addGame/', async (req,res) => {
         rounds : req.body.rounds,
     });
     
+    // automatically update the instances of the two players that played the game
     try {
         const savedGame = await game.save();
         res.json(savedGame);
@@ -126,15 +116,15 @@ router.post('/addGame/', async (req,res) => {
     }
 });
 
+// delete a specific game
 router.delete('/deleteGame/:gameId', (req,res) => {
     Player.findByIdAndRemove(mongoose.Types.ObjectId(req.params.game), {useFindAndModify: false}, (err, game) => {
-        // As always, handle any potential errors:
+        // handle any potential errors:
         if (err) return res.status(500).send(err);
-        // We'll create a simple object to send back with a message and the id of the document that was removed
-        // You can really do this however you want, though.
+        // Create a simple object to send back with a message and the id of the document that was removed
         const response = {
             message: "Game successfully deleted",
-            id: deck._id
+            id: game._id
         };
         return res.status(200).send(response);
     });

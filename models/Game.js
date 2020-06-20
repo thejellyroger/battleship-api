@@ -12,10 +12,12 @@ const GameSchema = mongoose.Schema({
         default: 'Single',
     },
     first_game_in_challenge: {
+        // in case of a challenge, this is used to create a link between the games that were played during that challenge 
         type: Boolean,
         default: "false",
     },
-    related_games: { // in case of a challenge  (e.g. best of 3)
+    related_games: { 
+        // in case of a challenge, this is used to create a link between the games that were played during that challenge
         type: [mongoose.Types.ObjectId],
         default: [],
     },

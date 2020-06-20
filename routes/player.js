@@ -34,8 +34,8 @@ router.get('/:playerId', (req,res) => {
 
 });
 router.get('/basicInfo/:playerId', (req,res) => {
-    // return the player with the 20 most recently played games
-    Player.findById(mongoose.Types.ObjectId(req.params.playerId),  { games: {$slice: 20} } , function (err, player) { 
+    // return the player with the 30 most recently played games
+    Player.findById(mongoose.Types.ObjectId(req.params.playerId),  { games: {$slice: 30} } , function (err, player) { 
         if (!player) {
             error = "Player not found";
             res.status(404).json({ error });
@@ -52,12 +52,14 @@ router.get('/basicInfo/:playerId', (req,res) => {
     });
 });
 
+// add a new player in the database with a custom username
 router.post('/addPlayer/:name', async (req,res) => {
     const player = new Player({
         username: req.params.name,
     });
     
     try {
+        // return the id of the newly created player
         const savedPlayer = await player.save();
         console.log(savedPlayer._id);
         res.json({"_id" : String(savedPlayer._id)});
@@ -67,12 +69,13 @@ router.post('/addPlayer/:name', async (req,res) => {
     }
 });
 
+
+// delete a player with a specific id
 router.delete('/deletePlayer/:playerId', (req,res) => {
     Player.findByIdAndRemove(req.params.playerId, {useFindAndModify: false}, (err, player) => {
-        // As always, handle any potential errors:
+        // handle any potential errors:
         if (err) return res.status(500).send(err);
-        // We'll create a simple object to send back with a message and the id of the document that was removed
-        // You can really do this however you want, though.
+        // send back the id of the document that was removed
         const response = {
             message: "Player successfully deleted",
             id: player._id

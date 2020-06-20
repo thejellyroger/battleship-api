@@ -6,7 +6,6 @@ const app = express();
 
 // routes
 const playerRoutes = require('./routes/player');
-const authRoutes = require('./routes/auth');
 const gamesRoutes = require('./routes/game-route');
 
 const PORT = process.env.PORT || 8080;
@@ -15,6 +14,7 @@ const server = http.createServer(app);
 
 // db
 const mongoose = require('mongoose');
+const uri = require('./db_connection');
 require('dotenv').config();
 
 // Middleware
@@ -24,7 +24,6 @@ app.use(express.json());
 
 // setup routes
 app.use('/players', playerRoutes);
-app.use('/auth', authRoutes);
 app.use('/games', gamesRoutes);
 
 // home route
@@ -32,13 +31,8 @@ app.get('/', (req,res) => {
     res.json('API per app Battleship, sviluppata dal gruppo Fritti Misti durante il corso di Mobile Programming');
 })
 
-// database connection
-const uri = 'mongodb+srv://frittimisti:lor1ale2giu3@battleship-xlj4m.mongodb.net/test?retryWrites=true&w=majority';
-// mongoose.connect(
-//     process.env.MONGO_URI,
-//     {useNewUrlParser:true,useUnifiedTopology:true},
-//     () => {console.log('connected to DB');}
-// );
+// // database connection
+// const uri = 'mongodb+srv://frittimisti:lor1ale2giu3@battleship-xlj4m.mongodb.net/test?retryWrites=true&w=majority';
 
 mongoose.connect(
     uri,
