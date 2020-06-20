@@ -32,7 +32,6 @@ app.get('/', (req,res) => {
 })
 
 // // database connection
-console.log(uri.db);
 mongoose.connect(
     uri,
     {useNewUrlParser:true,useUnifiedTopology:true},
