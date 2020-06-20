@@ -32,7 +32,6 @@ app.get('/', (req,res) => {
 })
 
 // // database connection
-// const uri = 'mongodb+srv://frittimisti:lor1ale2giu3@battleship-xlj4m.mongodb.net/test?retryWrites=true&w=majority';
 console.log(uri.db);
 mongoose.connect(
     uri,
