@@ -35,7 +35,7 @@ app.get('/', (req,res) => {
 // const uri = 'mongodb+srv://frittimisti:lor1ale2giu3@battleship-xlj4m.mongodb.net/test?retryWrites=true&w=majority';
 
 mongoose.connect(
-    uri,
+    uri.db,
     {useNewUrlParser:true,useUnifiedTopology:true},
     () => {console.log('connected to DB');}
 );
